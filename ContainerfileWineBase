@@ -1,0 +1,14 @@
+FROM docker.io/library/fedora:latest
+
+RUN sed -e 's|^metalink=|#metalink=|g' \
+         -e 's|^#baseurl=http://download.example/pub/fedora/linux|baseurl=https://mirrors.ustc.edu.cn/fedora|g' \
+         /etc/yum.repos.d/fedora.repo \
+         /etc/yum.repos.d/fedora-modular.repo \
+         /etc/yum.repos.d/fedora-updates.repo \
+         /etc/yum.repos.d/fedora-updates-modular.repo
+RUN dnf makecache
+
+RUN dnf update -y
+RUN dnf install wine wine-* -y
+
+ENTRYPOINT ["wine", "explorer"]
